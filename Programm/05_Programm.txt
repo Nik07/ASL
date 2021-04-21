@@ -1,0 +1,116 @@
+//5.	Программа на языке ASL с реализацией операционной семантики 
+// онтологических моделей для онтологических моделей инструкций языка IPL.
+
+// общее правило для всех expression
+// (выражений)
+defun execute:expression($expression) {
+	if ($expression.variableAccess == concept)
+	then return(execute:variableAccess($expression));
+	else if($expression.variableAssignment == concept)
+	then execute:variableAssignment($expression);
+	else if($instruction.qname("+") == concept)
+	then return(execute:plus($expression))
+	else return($expression) // случай константы
+}
+
+// общее правило для всех statement
+// (операторов)
+// общий подход
+//defun execute:statement($statement) {
+//  ...
+//  else if($statement.expressionStatement == concept)
+//  then return(execute:expressionStatement($statement));
+//  ...
+//}
+
+defun execute:statement($statement) {
+	if ($statement.ifStatement == concept)
+	then return(execute:ifStatement($statement));
+	else if($statement.blockStatement == concept)
+	then return(execute:blockStatement($statement));
+	else if($statement.whileStatement == concept)
+	then return(execute:whileStatement($statement));
+	else if($statement.do-whileStatement == concept)
+	then return(execute:do-whileStatement($statement));
+	else if($statement.forStatement == concept)
+	then return(execute:forStatement($statement))
+}
+
+
+// правило для доступа к значению переменной 
+defun execute:variableAccess($variableAccess) {
+	$value = @variableState.(variableAccess.variable);
+	if(isDef($value))
+	then return($value);
+	else jump(execute:variableAccess:Error, $variableAccess);	
+}
+
+
+// правило для операции сложения
+defun execute:plus($plus) {
+	$arguments = $plus.arguments;
+	return(
+		execute:expression($arguments[1]) + 
+		execute:expression($arguments[2])
+  );	
+}
+
+// правило для присваивания
+defun execute:variableAssignment($variableAssignment) {
+	@variableState.($variableAssignment.variable) =
+		execute:expression($variableAssignment.expression);	
+}
+
+// правило для условного оператора
+defun execute:ifStatement($ifStatement) {
+	if(execute:expression($ifStatement.condition) == 0)
+	then execute:statement($ifStatement.thenBranch);
+	else {
+		$elseBranch = $ifStatement.elseBranch;
+		if(isDef($elseBranch))
+		then execute:statement($elseBranch);
+	}
+}
+
+// правило для блока
+defun execute:blockStatement($blockStatement) {
+	foreach $i $statement {
+		SeqAsc($blockStatement.statementSequence) {
+			execute:statement($statement);
+		}
+	}
+}
+
+// правило для оператора while
+defun execute:whileStatement($whileStatement) {
+	$condition = execute:expression($whileStatement.condition);
+	if($condition != 0) then {
+		execute:statement($whileStatement.body);
+		execute:whileStatement($whileStatement);
+	}
+	catch(break);
+}
+
+// правило для оператора do-while
+defun execute:do-whileStatement($whileStatement) {
+	execute:statement($whileStatement.body);
+	execute:whileStatement($whileStatement);
+	catch(break);
+}
+
+// правило для оператора for
+// rep(for e1 condition e2 s) = rep({e1, if(condition) do-while s (e2, condition)});
+// defun forStatement($expression1, $condition, $expression2, $forBody)
+defun execute:forStatement($forStatement) {
+	execute:expression($forStatement.expression1);
+	$condition = execute:expression($forStatement.condition);
+	if($condition != 0) then {
+	execute:statement($forStatement.forBody);
+	$condition2 = execute:expression($forStatement.condition);
+	$whileStatement = whileStatement();
+	execute:whileStatement($whileStatement);
+	catch(break);
+}
+
+
+

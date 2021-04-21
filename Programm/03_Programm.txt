@@ -1,0 +1,81 @@
+//Программа на языке ASL с определениями конструкторов для инструкций.
+defun variableAccess($variable) {
+	return(
+		conz(
+			variableAccess, concept,
+			variable, $variable
+		)
+	);	
+}
+
+defun plus($expression1, $expression2) {
+	return(
+		conz(	
+			qname("+"), concept, 
+			arguments, seqOne($expression1, $expression2)
+		)
+	);		
+}
+
+defun variableAssignment($variable, $expression) {
+	return(
+		conz(
+			variableAssignment, concept,
+			variable, $variable,
+			expression, $expression
+		)
+	);	
+}
+
+defun ifStatement($condition, $thenBranch, $elseBranch... ) {
+	return(
+		conz(
+			ifStatement, concept,
+			condition, $condition,
+			thenBranch, $thenBranch,
+			elseBranch[1], $elseBranch[1]
+		)
+	);	
+}
+
+defun blockStatement($statementSequence...) {
+	return(
+		conz(
+			blockStatement, concept,
+			statementSequence, $statementSequence
+		)
+	);	
+}
+
+defun whileStatement($condition, $whileBody) {
+	return(
+		conz(
+			whileStatement, concept,
+			condition, $condition, 
+			whileBody, $whileBody
+		)
+	);	
+}
+
+defun do_whileStatement($condition, $whileBody) {
+	return(
+		conz(
+			do_whileStatement, concept, 
+			condition, $condition, 
+			whileBody, $whileBody
+		)
+	);	
+}
+
+//неправильно rep(for e1 condition e2 s) = rep({e1, if(condition) do-while s (e2, e1)});
+defun forStatement($expression1, $condition, $expression2, $forBody) {
+	return(
+		conz(
+			forStatement, concept,
+			expression1, $expression1,
+			condition, $condition,
+			expression2, $expression2,
+			forBody, $forBody
+		)
+	);	
+}

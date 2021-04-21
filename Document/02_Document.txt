@@ -1,0 +1,25 @@
+//Документ на естественном языке с описанием рекурсивной функции rep, 
+//сопоставляющей инструкциям языка IPL выражения на языке ASL.
+	rep(c) = c;
+	rep(x) = variableAccess(x);
+	rep(e1+e2) = plus(rep(e1), rep(e2));
+	rep((e)) = rep(e);
+	rep(x = e;) = variableAssignment(x, rep(e));
+	rep(e) = expressionStatement(rep(e));
+	rep(if(e) s else s′) = ifStatement(rep(e), rep(s), rep(s′)); 
+	rep(if(e) s) = ifStatement(rep(e), rep(s)); 
+	rep({s1, …, sn}) = blockStatement(rep(e), rep(s1), …, rep(sn)); 
+	rep(while(e) s) = whileStatement(rep(e), rep(s));
+	
+	//rep(do-while s (e)) = rep({s, while(e) s});
+	rep(do-while s (e)) = do_whileStatement(rep(e), rep(s));
+	//rep(for e1 e e2 s) = rep({e1, if(e) do-while s (e2, e)});
+	rep(for e1 e e2 s) = forStatement(rep(e1), rep(e), rep(e2), rep(s));
+
+//для последовательностей операторов S1, S2, …, Sn, S (здесь с большой буквы, 
+//чтобы отличать последовательности операторов от операторов, 
+//т.е. Si – это последовательность операторов si1, si2, ..., sik)
+	rep(switch(e) case с1 S1) = rep(if(e == c1) {S1});
+	rep(switch(e) case с1 S1 … case сn Sn) = rep(if(e == c1) {S1, switch(e) case с2 S2 … case сn Sn} else switch(e) case с2 S2 … case сn Sn);
+	rep(switch(e) case с1 S1 default S) = rep(if(e == c1) {S1, S} else {S});
+	rep(switch(e) case с1 S1 … case сn Sn default S) = rep(if(e == c1) {S1, switch(e) case с2 S2 … case сn Sn default S} else switch(e) case с2 S2 … case сn Sn default S);

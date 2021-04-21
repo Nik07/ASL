@@ -1,0 +1,2877 @@
+Terminals unused in grammar
+
+   END_OF_FILE
+   DOT
+   DOTDOT
+   BACKQUOTE
+   SQUARE
+
+
+Состояние 8 конфликты: 1 сдвига/вывода
+Состояние 29 конфликты: 1 сдвига/вывода
+Состояние 31 конфликты: 1 сдвига/вывода
+
+
+Грамматика
+
+    0 $accept: program $end
+
+    1 program: /* пусто */
+    2        | program stmt EOL
+
+    3 stmt: expr SEMICOLON
+
+    4 defun: DEFUN QNAME LBRACE var_list RBRACE expressions_block
+
+    5 while: WHILE LBRACE expr RBRACE expressions_block
+
+    6 if: ifx
+    7   | ife
+
+    8 ifx: IF LBRACE expr RBRACE THEN expr
+
+    9 ife: IF LBRACE expr RBRACE THEN expr ELSE expr
+
+   10 expr: QNAME LBRACE expr_list RBRACE
+   11     | get_attr
+   12     | get_attr EQUAL expr
+   13     | conz
+   14     | seq
+   15     | while
+   16     | defun
+   17     | if
+   18     | expressions_block
+   19     | INTEGER
+   20     | DOUBLE
+   21     | BOOLEAN
+   22     | ASL_STRING
+   23     | QNAME
+   24     | UNDEF
+   25     | var
+   26     | var EQUAL expr
+   27     | MINUS expr
+   28     | NOT expr
+   29     | expr PLUS expr
+   30     | expr MINUS expr
+   31     | expr DIVISION expr
+   32     | expr MULT expr
+   33     | expr EQ expr
+   34     | expr NEQ expr
+   35     | expr GT expr
+   36     | expr GTE expr
+   37     | expr LT expr
+   38     | expr LTE expr
+   39     | expr AND expr
+   40     | expr OR expr
+   41     | LBRACE expr RBRACE
+
+   42 conz: LCURLY_PER assignment_list RCURLY_PER
+   43     | ATTRIBUTON_VARIABLE EQUAL LCURLY_PER assignment_list RCURLY_PER
+
+   44 seq: LBRACE_PER expressions_comma RBRACE_PER
+   45    | ATTRIBUTON_VARIABLE EQUAL LBRACE_PER expressions_comma RBRACE_PER
+
+   46 assignment_list: expr EQUAL expr
+   47                | assignment_list COMMA expr EQUAL expr
+
+   48 get_attr: expr LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+   49 expressions_square_braces: expr
+   50                          | expressions_square_braces TWOSQUAREBRACES expr
+
+   51 expressions_block: LCURLYBRACE RCURLYBRACE
+   52                  | LCURLYBRACE expressions_semicolon RCURLYBRACE
+   53                  | LCURLYBRACE expressions_semicolon SEMICOLON RCURLYBRACE
+
+   54 expressions_semicolon: expr
+   55                      | expressions_semicolon SEMICOLON expr
+
+   56 expr_list: expressions_comma
+   57          | /* пусто */
+
+   58 expressions_comma: expr
+   59                  | expressions_comma COMMA expr
+
+   60 var_list: variables
+   61         | /* пусто */
+
+   62 variables: VARIABLE
+   63          | variables COMMA VARIABLE
+
+   64 var: VARIABLE
+   65    | ATTRIBUTON_VARIABLE
+
+
+Терминальные символы с правилами, в которых они появляются
+
+$end (0) 0
+error (256)
+INTEGER (258) 19
+DOUBLE (259) 20
+ASL_STRING (260) 22
+QNAME (261) 4 10 23
+VARIABLE (262) 62 63 64
+ATTRIBUTON_VARIABLE (263) 43 45 65
+BOOLEAN (264) 21
+UNDEF (265) 24
+WHILE (266) 5
+EOL (267) 2
+END_OF_FILE (268)
+NOT (269) 28
+EQ (270) 33
+NEQ (271) 34
+GT (272) 35
+GTE (273) 36
+LT (274) 37
+LTE (275) 38
+AND (276) 39
+OR (277) 40
+MINUS (278) 27 30
+PLUS (279) 29
+DIVISION (280) 31
+MULT (281) 32
+EQUAL (282) 12 26 43 45 46 47
+LBRACE (283) 4 5 8 9 10 41
+RBRACE (284) 4 5 8 9 10 41
+SEMICOLON (285) 3 53 55
+DOT (286)
+COMMA (287) 47 59 63
+DOTDOT (288)
+LBRACE_PER (289) 44 45
+RBRACE_PER (290) 44 45
+LCURLY_PER (291) 42 43
+RCURLY_PER (292) 42 43
+LSQUAREBRACE (293) 48
+RSQUAREBRACE (294) 48
+TWOSQUAREBRACES (295) 50
+LCURLYBRACE (296) 51 52 53
+RCURLYBRACE (297) 51 52 53
+BACKQUOTE (298)
+DEFUN (299) 4
+IF (300) 8 9
+THEN (301) 8 9
+ELSE (302) 9
+UNMINUS (303)
+SQUARE (304)
+
+
+Нетерминальные символы с правилами, в которых они появляются
+
+$accept (50)
+    налево: 0
+program (51)
+    налево: 1 2, направо: 0 2
+stmt (52)
+    налево: 3, направо: 2
+defun (53)
+    налево: 4, направо: 16
+while (54)
+    налево: 5, направо: 15
+if (55)
+    налево: 6 7, направо: 17
+ifx (56)
+    налево: 8, направо: 6
+ife (57)
+    налево: 9, направо: 7
+expr (58)
+    налево: 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28
+    29 30 31 32 33 34 35 36 37 38 39 40 41, направо: 3 5 8 9 12 26
+    27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 46 47 48 49 50 54
+    55 58 59
+conz (59)
+    налево: 42 43, направо: 13
+seq (60)
+    налево: 44 45, направо: 14
+assignment_list (61)
+    налево: 46 47, направо: 42 43 47
+get_attr (62)
+    налево: 48, направо: 11 12
+expressions_square_braces (63)
+    налево: 49 50, направо: 48 50
+expressions_block (64)
+    налево: 51 52 53, направо: 4 5 18
+expressions_semicolon (65)
+    налево: 54 55, направо: 52 53 55
+expr_list (66)
+    налево: 56 57, направо: 10
+expressions_comma (67)
+    налево: 58 59, направо: 44 45 56 59
+var_list (68)
+    налево: 60 61, направо: 4
+variables (69)
+    налево: 62 63, направо: 60 63
+var (70)
+    налево: 64 65, направо: 25 26
+
+
+состояние 0
+
+    0 $accept: . program $end
+
+    $default  вывод с использованием правила 1 (program)
+
+    program  переход в состояние 1
+
+
+состояние 1
+
+    0 $accept: program . $end
+    2 program: program . stmt EOL
+
+    $end                 сдвиг, и переход в состояние 2
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    stmt               переход в состояние 20
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 26
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 2
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+состояние 3
+
+   19 expr: INTEGER .
+
+    $default  вывод с использованием правила 19 (expr)
+
+
+состояние 4
+
+   20 expr: DOUBLE .
+
+    $default  вывод с использованием правила 20 (expr)
+
+
+состояние 5
+
+   22 expr: ASL_STRING .
+
+    $default  вывод с использованием правила 22 (expr)
+
+
+состояние 6
+
+   10 expr: QNAME . LBRACE expr_list RBRACE
+   23     | QNAME .
+
+    LBRACE  сдвиг, и переход в состояние 32
+
+    $default  вывод с использованием правила 23 (expr)
+
+
+состояние 7
+
+   64 var: VARIABLE .
+
+    $default  вывод с использованием правила 64 (var)
+
+
+состояние 8
+
+   43 conz: ATTRIBUTON_VARIABLE . EQUAL LCURLY_PER assignment_list RCURLY_PER
+   45 seq: ATTRIBUTON_VARIABLE . EQUAL LBRACE_PER expressions_comma RBRACE_PER
+   65 var: ATTRIBUTON_VARIABLE .
+
+    EQUAL  сдвиг, и переход в состояние 33
+
+    EQUAL     [вывод с использованием правила 65 (var)]
+    $default  вывод с использованием правила 65 (var)
+
+
+состояние 9
+
+   21 expr: BOOLEAN .
+
+    $default  вывод с использованием правила 21 (expr)
+
+
+состояние 10
+
+   24 expr: UNDEF .
+
+    $default  вывод с использованием правила 24 (expr)
+
+
+состояние 11
+
+    5 while: WHILE . LBRACE expr RBRACE expressions_block
+
+    LBRACE  сдвиг, и переход в состояние 34
+
+
+состояние 12
+
+   28 expr: NOT . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 35
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 13
+
+   27 expr: MINUS . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 36
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 14
+
+   41 expr: LBRACE . expr RBRACE
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 37
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 15
+
+   44 seq: LBRACE_PER . expressions_comma RBRACE_PER
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 38
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    expressions_comma  переход в состояние 39
+    var                переход в состояние 31
+
+
+состояние 16
+
+   42 conz: LCURLY_PER . assignment_list RCURLY_PER
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 40
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    assignment_list    переход в состояние 41
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 17
+
+   51 expressions_block: LCURLYBRACE . RCURLYBRACE
+   52                  | LCURLYBRACE . expressions_semicolon RCURLYBRACE
+   53                  | LCURLYBRACE . expressions_semicolon SEMICOLON RCURLYBRACE
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    RCURLYBRACE          сдвиг, и переход в состояние 42
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun                  переход в состояние 21
+    while                  переход в состояние 22
+    if                     переход в состояние 23
+    ifx                    переход в состояние 24
+    ife                    переход в состояние 25
+    expr                   переход в состояние 43
+    conz                   переход в состояние 27
+    seq                    переход в состояние 28
+    get_attr               переход в состояние 29
+    expressions_block      переход в состояние 30
+    expressions_semicolon  переход в состояние 44
+    var                    переход в состояние 31
+
+
+состояние 18
+
+    4 defun: DEFUN . QNAME LBRACE var_list RBRACE expressions_block
+
+    QNAME  сдвиг, и переход в состояние 45
+
+
+состояние 19
+
+    8 ifx: IF . LBRACE expr RBRACE THEN expr
+    9 ife: IF . LBRACE expr RBRACE THEN expr ELSE expr
+
+    LBRACE  сдвиг, и переход в состояние 46
+
+
+состояние 20
+
+    2 program: program stmt . EOL
+
+    EOL  сдвиг, и переход в состояние 47
+
+
+состояние 21
+
+   16 expr: defun .
+
+    $default  вывод с использованием правила 16 (expr)
+
+
+состояние 22
+
+   15 expr: while .
+
+    $default  вывод с использованием правила 15 (expr)
+
+
+состояние 23
+
+   17 expr: if .
+
+    $default  вывод с использованием правила 17 (expr)
+
+
+состояние 24
+
+    6 if: ifx .
+
+    $default  вывод с использованием правила 6 (if)
+
+
+состояние 25
+
+    7 if: ife .
+
+    $default  вывод с использованием правила 7 (if)
+
+
+состояние 26
+
+    3 stmt: expr . SEMICOLON
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    EQ            сдвиг, и переход в состояние 48
+    NEQ           сдвиг, и переход в состояние 49
+    GT            сдвиг, и переход в состояние 50
+    GTE           сдвиг, и переход в состояние 51
+    LT            сдвиг, и переход в состояние 52
+    LTE           сдвиг, и переход в состояние 53
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    SEMICOLON     сдвиг, и переход в состояние 60
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+
+состояние 27
+
+   13 expr: conz .
+
+    $default  вывод с использованием правила 13 (expr)
+
+
+состояние 28
+
+   14 expr: seq .
+
+    $default  вывод с использованием правила 14 (expr)
+
+
+состояние 29
+
+   11 expr: get_attr .
+   12     | get_attr . EQUAL expr
+
+    EQUAL  сдвиг, и переход в состояние 62
+
+    EQUAL     [вывод с использованием правила 11 (expr)]
+    $default  вывод с использованием правила 11 (expr)
+
+
+состояние 30
+
+   18 expr: expressions_block .
+
+    $default  вывод с использованием правила 18 (expr)
+
+
+состояние 31
+
+   25 expr: var .
+   26     | var . EQUAL expr
+
+    EQUAL  сдвиг, и переход в состояние 63
+
+    EQUAL     [вывод с использованием правила 25 (expr)]
+    $default  вывод с использованием правила 25 (expr)
+
+
+состояние 32
+
+   10 expr: QNAME LBRACE . expr_list RBRACE
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    $default  вывод с использованием правила 57 (expr_list)
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 38
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    expr_list          переход в состояние 64
+    expressions_comma  переход в состояние 65
+    var                переход в состояние 31
+
+
+состояние 33
+
+   43 conz: ATTRIBUTON_VARIABLE EQUAL . LCURLY_PER assignment_list RCURLY_PER
+   45 seq: ATTRIBUTON_VARIABLE EQUAL . LBRACE_PER expressions_comma RBRACE_PER
+
+    LBRACE_PER  сдвиг, и переход в состояние 66
+    LCURLY_PER  сдвиг, и переход в состояние 67
+
+
+состояние 34
+
+    5 while: WHILE LBRACE . expr RBRACE expressions_block
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 68
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 35
+
+   28 expr: NOT expr .
+   29     | expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    GT            сдвиг, и переход в состояние 50
+    GTE           сдвиг, и переход в состояние 51
+    LT            сдвиг, и переход в состояние 52
+    LTE           сдвиг, и переход в состояние 53
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 28 (expr)
+
+
+состояние 36
+
+   27 expr: MINUS expr .
+   29     | expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 27 (expr)
+
+
+состояние 37
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   41     | LBRACE expr . RBRACE
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    EQ            сдвиг, и переход в состояние 48
+    NEQ           сдвиг, и переход в состояние 49
+    GT            сдвиг, и переход в состояние 50
+    GTE           сдвиг, и переход в состояние 51
+    LT            сдвиг, и переход в состояние 52
+    LTE           сдвиг, и переход в состояние 53
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    RBRACE        сдвиг, и переход в состояние 69
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+
+состояние 38
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+   58 expressions_comma: expr .
+
+    EQ            сдвиг, и переход в состояние 48
+    NEQ           сдвиг, и переход в состояние 49
+    GT            сдвиг, и переход в состояние 50
+    GTE           сдвиг, и переход в состояние 51
+    LT            сдвиг, и переход в состояние 52
+    LTE           сдвиг, и переход в состояние 53
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 58 (expressions_comma)
+
+
+состояние 39
+
+   44 seq: LBRACE_PER expressions_comma . RBRACE_PER
+   59 expressions_comma: expressions_comma . COMMA expr
+
+    COMMA       сдвиг, и переход в состояние 70
+    RBRACE_PER  сдвиг, и переход в состояние 71
+
+
+состояние 40
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   46 assignment_list: expr . EQUAL expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    EQ            сдвиг, и переход в состояние 48
+    NEQ           сдвиг, и переход в состояние 49
+    GT            сдвиг, и переход в состояние 50
+    GTE           сдвиг, и переход в состояние 51
+    LT            сдвиг, и переход в состояние 52
+    LTE           сдвиг, и переход в состояние 53
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    EQUAL         сдвиг, и переход в состояние 72
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+
+состояние 41
+
+   42 conz: LCURLY_PER assignment_list . RCURLY_PER
+   47 assignment_list: assignment_list . COMMA expr EQUAL expr
+
+    COMMA       сдвиг, и переход в состояние 73
+    RCURLY_PER  сдвиг, и переход в состояние 74
+
+
+состояние 42
+
+   51 expressions_block: LCURLYBRACE RCURLYBRACE .
+
+    $default  вывод с использованием правила 51 (expressions_block)
+
+
+состояние 43
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+   54 expressions_semicolon: expr .
+
+    EQ            сдвиг, и переход в состояние 48
+    NEQ           сдвиг, и переход в состояние 49
+    GT            сдвиг, и переход в состояние 50
+    GTE           сдвиг, и переход в состояние 51
+    LT            сдвиг, и переход в состояние 52
+    LTE           сдвиг, и переход в состояние 53
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 54 (expressions_semicolon)
+
+
+состояние 44
+
+   52 expressions_block: LCURLYBRACE expressions_semicolon . RCURLYBRACE
+   53                  | LCURLYBRACE expressions_semicolon . SEMICOLON RCURLYBRACE
+   55 expressions_semicolon: expressions_semicolon . SEMICOLON expr
+
+    SEMICOLON    сдвиг, и переход в состояние 75
+    RCURLYBRACE  сдвиг, и переход в состояние 76
+
+
+состояние 45
+
+    4 defun: DEFUN QNAME . LBRACE var_list RBRACE expressions_block
+
+    LBRACE  сдвиг, и переход в состояние 77
+
+
+состояние 46
+
+    8 ifx: IF LBRACE . expr RBRACE THEN expr
+    9 ife: IF LBRACE . expr RBRACE THEN expr ELSE expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 78
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 47
+
+    2 program: program stmt EOL .
+
+    $default  вывод с использованием правила 2 (program)
+
+
+состояние 48
+
+   33 expr: expr EQ . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 79
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 49
+
+   34 expr: expr NEQ . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 80
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 50
+
+   35 expr: expr GT . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 81
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 51
+
+   36 expr: expr GTE . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 82
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 52
+
+   37 expr: expr LT . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 83
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 53
+
+   38 expr: expr LTE . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 84
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 54
+
+   39 expr: expr AND . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 85
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 55
+
+   40 expr: expr OR . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 86
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 56
+
+   30 expr: expr MINUS . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 87
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 57
+
+   29 expr: expr PLUS . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 88
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 58
+
+   31 expr: expr DIVISION . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 89
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 59
+
+   32 expr: expr MULT . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 90
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 60
+
+    3 stmt: expr SEMICOLON .
+
+    $default  вывод с использованием правила 3 (stmt)
+
+
+состояние 61
+
+   48 get_attr: expr LSQUAREBRACE . expressions_square_braces RSQUAREBRACE
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun                      переход в состояние 21
+    while                      переход в состояние 22
+    if                         переход в состояние 23
+    ifx                        переход в состояние 24
+    ife                        переход в состояние 25
+    expr                       переход в состояние 91
+    conz                       переход в состояние 27
+    seq                        переход в состояние 28
+    get_attr                   переход в состояние 29
+    expressions_square_braces  переход в состояние 92
+    expressions_block          переход в состояние 30
+    var                        переход в состояние 31
+
+
+состояние 62
+
+   12 expr: get_attr EQUAL . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 93
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 63
+
+   26 expr: var EQUAL . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 94
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 64
+
+   10 expr: QNAME LBRACE expr_list . RBRACE
+
+    RBRACE  сдвиг, и переход в состояние 95
+
+
+состояние 65
+
+   56 expr_list: expressions_comma .
+   59 expressions_comma: expressions_comma . COMMA expr
+
+    COMMA  сдвиг, и переход в состояние 70
+
+    $default  вывод с использованием правила 56 (expr_list)
+
+
+состояние 66
+
+   45 seq: ATTRIBUTON_VARIABLE EQUAL LBRACE_PER . expressions_comma RBRACE_PER
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 38
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    expressions_comma  переход в состояние 96
+    var                переход в состояние 31
+
+
+состояние 67
+
+   43 conz: ATTRIBUTON_VARIABLE EQUAL LCURLY_PER . assignment_list RCURLY_PER
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 40
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    assignment_list    переход в состояние 97
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 68
+
+    5 while: WHILE LBRACE expr . RBRACE expressions_block
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    EQ            сдвиг, и переход в состояние 48
+    NEQ           сдвиг, и переход в состояние 49
+    GT            сдвиг, и переход в состояние 50
+    GTE           сдвиг, и переход в состояние 51
+    LT            сдвиг, и переход в состояние 52
+    LTE           сдвиг, и переход в состояние 53
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    RBRACE        сдвиг, и переход в состояние 98
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+
+состояние 69
+
+   41 expr: LBRACE expr RBRACE .
+
+    $default  вывод с использованием правила 41 (expr)
+
+
+состояние 70
+
+   59 expressions_comma: expressions_comma COMMA . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 99
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 71
+
+   44 seq: LBRACE_PER expressions_comma RBRACE_PER .
+
+    $default  вывод с использованием правила 44 (seq)
+
+
+состояние 72
+
+   46 assignment_list: expr EQUAL . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 100
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 73
+
+   47 assignment_list: assignment_list COMMA . expr EQUAL expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 101
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 74
+
+   42 conz: LCURLY_PER assignment_list RCURLY_PER .
+
+    $default  вывод с использованием правила 42 (conz)
+
+
+состояние 75
+
+   53 expressions_block: LCURLYBRACE expressions_semicolon SEMICOLON . RCURLYBRACE
+   55 expressions_semicolon: expressions_semicolon SEMICOLON . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    RCURLYBRACE          сдвиг, и переход в состояние 102
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 103
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 76
+
+   52 expressions_block: LCURLYBRACE expressions_semicolon RCURLYBRACE .
+
+    $default  вывод с использованием правила 52 (expressions_block)
+
+
+состояние 77
+
+    4 defun: DEFUN QNAME LBRACE . var_list RBRACE expressions_block
+
+    VARIABLE  сдвиг, и переход в состояние 104
+
+    $default  вывод с использованием правила 61 (var_list)
+
+    var_list   переход в состояние 105
+    variables  переход в состояние 106
+
+
+состояние 78
+
+    8 ifx: IF LBRACE expr . RBRACE THEN expr
+    9 ife: IF LBRACE expr . RBRACE THEN expr ELSE expr
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    EQ            сдвиг, и переход в состояние 48
+    NEQ           сдвиг, и переход в состояние 49
+    GT            сдвиг, и переход в состояние 50
+    GTE           сдвиг, и переход в состояние 51
+    LT            сдвиг, и переход в состояние 52
+    LTE           сдвиг, и переход в состояние 53
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    RBRACE        сдвиг, и переход в состояние 107
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+
+состояние 79
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   33     | expr EQ expr .
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    GT            сдвиг, и переход в состояние 50
+    GTE           сдвиг, и переход в состояние 51
+    LT            сдвиг, и переход в состояние 52
+    LTE           сдвиг, и переход в состояние 53
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 33 (expr)
+
+
+состояние 80
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   34     | expr NEQ expr .
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    GT            сдвиг, и переход в состояние 50
+    GTE           сдвиг, и переход в состояние 51
+    LT            сдвиг, и переход в состояние 52
+    LTE           сдвиг, и переход в состояние 53
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 34 (expr)
+
+
+состояние 81
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   35     | expr GT expr .
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 35 (expr)
+
+
+состояние 82
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   36     | expr GTE expr .
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 36 (expr)
+
+
+состояние 83
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   37     | expr LT expr .
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 37 (expr)
+
+
+состояние 84
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   38     | expr LTE expr .
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 38 (expr)
+
+
+состояние 85
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   39     | expr AND expr .
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 39 (expr)
+
+
+состояние 86
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   40     | expr OR expr .
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 40 (expr)
+
+
+состояние 87
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   30     | expr MINUS expr .
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 30 (expr)
+
+
+состояние 88
+
+   29 expr: expr . PLUS expr
+   29     | expr PLUS expr .
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 29 (expr)
+
+
+состояние 89
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   31     | expr DIVISION expr .
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 31 (expr)
+
+
+состояние 90
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   32     | expr MULT expr .
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 32 (expr)
+
+
+состояние 91
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+   49 expressions_square_braces: expr .
+
+    EQ            сдвиг, и переход в состояние 48
+    NEQ           сдвиг, и переход в состояние 49
+    GT            сдвиг, и переход в состояние 50
+    GTE           сдвиг, и переход в состояние 51
+    LT            сдвиг, и переход в состояние 52
+    LTE           сдвиг, и переход в состояние 53
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 49 (expressions_square_braces)
+
+
+состояние 92
+
+   48 get_attr: expr LSQUAREBRACE expressions_square_braces . RSQUAREBRACE
+   50 expressions_square_braces: expressions_square_braces . TWOSQUAREBRACES expr
+
+    RSQUAREBRACE     сдвиг, и переход в состояние 108
+    TWOSQUAREBRACES  сдвиг, и переход в состояние 109
+
+
+состояние 93
+
+   12 expr: get_attr EQUAL expr .
+   29     | expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    EQ            сдвиг, и переход в состояние 48
+    NEQ           сдвиг, и переход в состояние 49
+    GT            сдвиг, и переход в состояние 50
+    GTE           сдвиг, и переход в состояние 51
+    LT            сдвиг, и переход в состояние 52
+    LTE           сдвиг, и переход в состояние 53
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 12 (expr)
+
+
+состояние 94
+
+   26 expr: var EQUAL expr .
+   29     | expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    EQ            сдвиг, и переход в состояние 48
+    NEQ           сдвиг, и переход в состояние 49
+    GT            сдвиг, и переход в состояние 50
+    GTE           сдвиг, и переход в состояние 51
+    LT            сдвиг, и переход в состояние 52
+    LTE           сдвиг, и переход в состояние 53
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 26 (expr)
+
+
+состояние 95
+
+   10 expr: QNAME LBRACE expr_list RBRACE .
+
+    $default  вывод с использованием правила 10 (expr)
+
+
+состояние 96
+
+   45 seq: ATTRIBUTON_VARIABLE EQUAL LBRACE_PER expressions_comma . RBRACE_PER
+   59 expressions_comma: expressions_comma . COMMA expr
+
+    COMMA       сдвиг, и переход в состояние 70
+    RBRACE_PER  сдвиг, и переход в состояние 110
+
+
+состояние 97
+
+   43 conz: ATTRIBUTON_VARIABLE EQUAL LCURLY_PER assignment_list . RCURLY_PER
+   47 assignment_list: assignment_list . COMMA expr EQUAL expr
+
+    COMMA       сдвиг, и переход в состояние 73
+    RCURLY_PER  сдвиг, и переход в состояние 111
+
+
+состояние 98
+
+    5 while: WHILE LBRACE expr RBRACE . expressions_block
+
+    LCURLYBRACE  сдвиг, и переход в состояние 17
+
+    expressions_block  переход в состояние 112
+
+
+состояние 99
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+   59 expressions_comma: expressions_comma COMMA expr .
+
+    EQ            сдвиг, и переход в состояние 48
+    NEQ           сдвиг, и переход в состояние 49
+    GT            сдвиг, и переход в состояние 50
+    GTE           сдвиг, и переход в состояние 51
+    LT            сдвиг, и переход в состояние 52
+    LTE           сдвиг, и переход в состояние 53
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 59 (expressions_comma)
+
+
+состояние 100
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   46 assignment_list: expr EQUAL expr .
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    EQ            сдвиг, и переход в состояние 48
+    NEQ           сдвиг, и переход в состояние 49
+    GT            сдвиг, и переход в состояние 50
+    GTE           сдвиг, и переход в состояние 51
+    LT            сдвиг, и переход в состояние 52
+    LTE           сдвиг, и переход в состояние 53
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 46 (assignment_list)
+
+
+состояние 101
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   47 assignment_list: assignment_list COMMA expr . EQUAL expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    EQ            сдвиг, и переход в состояние 48
+    NEQ           сдвиг, и переход в состояние 49
+    GT            сдвиг, и переход в состояние 50
+    GTE           сдвиг, и переход в состояние 51
+    LT            сдвиг, и переход в состояние 52
+    LTE           сдвиг, и переход в состояние 53
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    EQUAL         сдвиг, и переход в состояние 113
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+
+состояние 102
+
+   53 expressions_block: LCURLYBRACE expressions_semicolon SEMICOLON RCURLYBRACE .
+
+    $default  вывод с использованием правила 53 (expressions_block)
+
+
+состояние 103
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+   55 expressions_semicolon: expressions_semicolon SEMICOLON expr .
+
+    EQ            сдвиг, и переход в состояние 48
+    NEQ           сдвиг, и переход в состояние 49
+    GT            сдвиг, и переход в состояние 50
+    GTE           сдвиг, и переход в состояние 51
+    LT            сдвиг, и переход в состояние 52
+    LTE           сдвиг, и переход в состояние 53
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 55 (expressions_semicolon)
+
+
+состояние 104
+
+   62 variables: VARIABLE .
+
+    $default  вывод с использованием правила 62 (variables)
+
+
+состояние 105
+
+    4 defun: DEFUN QNAME LBRACE var_list . RBRACE expressions_block
+
+    RBRACE  сдвиг, и переход в состояние 114
+
+
+состояние 106
+
+   60 var_list: variables .
+   63 variables: variables . COMMA VARIABLE
+
+    COMMA  сдвиг, и переход в состояние 115
+
+    $default  вывод с использованием правила 60 (var_list)
+
+
+состояние 107
+
+    8 ifx: IF LBRACE expr RBRACE . THEN expr
+    9 ife: IF LBRACE expr RBRACE . THEN expr ELSE expr
+
+    THEN  сдвиг, и переход в состояние 116
+
+
+состояние 108
+
+   48 get_attr: expr LSQUAREBRACE expressions_square_braces RSQUAREBRACE .
+
+    $default  вывод с использованием правила 48 (get_attr)
+
+
+состояние 109
+
+   50 expressions_square_braces: expressions_square_braces TWOSQUAREBRACES . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 117
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 110
+
+   45 seq: ATTRIBUTON_VARIABLE EQUAL LBRACE_PER expressions_comma RBRACE_PER .
+
+    $default  вывод с использованием правила 45 (seq)
+
+
+состояние 111
+
+   43 conz: ATTRIBUTON_VARIABLE EQUAL LCURLY_PER assignment_list RCURLY_PER .
+
+    $default  вывод с использованием правила 43 (conz)
+
+
+состояние 112
+
+    5 while: WHILE LBRACE expr RBRACE expressions_block .
+
+    $default  вывод с использованием правила 5 (while)
+
+
+состояние 113
+
+   47 assignment_list: assignment_list COMMA expr EQUAL . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 118
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 114
+
+    4 defun: DEFUN QNAME LBRACE var_list RBRACE . expressions_block
+
+    LCURLYBRACE  сдвиг, и переход в состояние 17
+
+    expressions_block  переход в состояние 119
+
+
+состояние 115
+
+   63 variables: variables COMMA . VARIABLE
+
+    VARIABLE  сдвиг, и переход в состояние 120
+
+
+состояние 116
+
+    8 ifx: IF LBRACE expr RBRACE THEN . expr
+    9 ife: IF LBRACE expr RBRACE THEN . expr ELSE expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 121
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 117
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+   50 expressions_square_braces: expressions_square_braces TWOSQUAREBRACES expr .
+
+    EQ            сдвиг, и переход в состояние 48
+    NEQ           сдвиг, и переход в состояние 49
+    GT            сдвиг, и переход в состояние 50
+    GTE           сдвиг, и переход в состояние 51
+    LT            сдвиг, и переход в состояние 52
+    LTE           сдвиг, и переход в состояние 53
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 50 (expressions_square_braces)
+
+
+состояние 118
+
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   47 assignment_list: assignment_list COMMA expr EQUAL expr .
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    EQ            сдвиг, и переход в состояние 48
+    NEQ           сдвиг, и переход в состояние 49
+    GT            сдвиг, и переход в состояние 50
+    GTE           сдвиг, и переход в состояние 51
+    LT            сдвиг, и переход в состояние 52
+    LTE           сдвиг, и переход в состояние 53
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 47 (assignment_list)
+
+
+состояние 119
+
+    4 defun: DEFUN QNAME LBRACE var_list RBRACE expressions_block .
+
+    $default  вывод с использованием правила 4 (defun)
+
+
+состояние 120
+
+   63 variables: variables COMMA VARIABLE .
+
+    $default  вывод с использованием правила 63 (variables)
+
+
+состояние 121
+
+    8 ifx: IF LBRACE expr RBRACE THEN expr .
+    9 ife: IF LBRACE expr RBRACE THEN expr . ELSE expr
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    EQ            сдвиг, и переход в состояние 48
+    NEQ           сдвиг, и переход в состояние 49
+    GT            сдвиг, и переход в состояние 50
+    GTE           сдвиг, и переход в состояние 51
+    LT            сдвиг, и переход в состояние 52
+    LTE           сдвиг, и переход в состояние 53
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+    ELSE          сдвиг, и переход в состояние 122
+
+    $default  вывод с использованием правила 8 (ifx)
+
+
+состояние 122
+
+    9 ife: IF LBRACE expr RBRACE THEN expr ELSE . expr
+
+    INTEGER              сдвиг, и переход в состояние 3
+    DOUBLE               сдвиг, и переход в состояние 4
+    ASL_STRING           сдвиг, и переход в состояние 5
+    QNAME                сдвиг, и переход в состояние 6
+    VARIABLE             сдвиг, и переход в состояние 7
+    ATTRIBUTON_VARIABLE  сдвиг, и переход в состояние 8
+    BOOLEAN              сдвиг, и переход в состояние 9
+    UNDEF                сдвиг, и переход в состояние 10
+    WHILE                сдвиг, и переход в состояние 11
+    NOT                  сдвиг, и переход в состояние 12
+    MINUS                сдвиг, и переход в состояние 13
+    LBRACE               сдвиг, и переход в состояние 14
+    LBRACE_PER           сдвиг, и переход в состояние 15
+    LCURLY_PER           сдвиг, и переход в состояние 16
+    LCURLYBRACE          сдвиг, и переход в состояние 17
+    DEFUN                сдвиг, и переход в состояние 18
+    IF                   сдвиг, и переход в состояние 19
+
+    defun              переход в состояние 21
+    while              переход в состояние 22
+    if                 переход в состояние 23
+    ifx                переход в состояние 24
+    ife                переход в состояние 25
+    expr               переход в состояние 123
+    conz               переход в состояние 27
+    seq                переход в состояние 28
+    get_attr           переход в состояние 29
+    expressions_block  переход в состояние 30
+    var                переход в состояние 31
+
+
+состояние 123
+
+    9 ife: IF LBRACE expr RBRACE THEN expr ELSE expr .
+   29 expr: expr . PLUS expr
+   30     | expr . MINUS expr
+   31     | expr . DIVISION expr
+   32     | expr . MULT expr
+   33     | expr . EQ expr
+   34     | expr . NEQ expr
+   35     | expr . GT expr
+   36     | expr . GTE expr
+   37     | expr . LT expr
+   38     | expr . LTE expr
+   39     | expr . AND expr
+   40     | expr . OR expr
+   48 get_attr: expr . LSQUAREBRACE expressions_square_braces RSQUAREBRACE
+
+    EQ            сдвиг, и переход в состояние 48
+    NEQ           сдвиг, и переход в состояние 49
+    GT            сдвиг, и переход в состояние 50
+    GTE           сдвиг, и переход в состояние 51
+    LT            сдвиг, и переход в состояние 52
+    LTE           сдвиг, и переход в состояние 53
+    AND           сдвиг, и переход в состояние 54
+    OR            сдвиг, и переход в состояние 55
+    MINUS         сдвиг, и переход в состояние 56
+    PLUS          сдвиг, и переход в состояние 57
+    DIVISION      сдвиг, и переход в состояние 58
+    MULT          сдвиг, и переход в состояние 59
+    LSQUAREBRACE  сдвиг, и переход в состояние 61
+
+    $default  вывод с использованием правила 9 (ife)
