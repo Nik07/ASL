@@ -17,6 +17,7 @@ defun plus($expression1, $expression2) {
 	);		
 }
 
+
 defun variableAssignment($variable, $expression) {
 	return(
 		conz(
