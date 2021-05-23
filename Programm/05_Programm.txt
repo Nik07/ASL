@@ -13,6 +13,7 @@ defun execute:expression($expression) {
 	else return($expression) // случай константы
 }
 
+
 // общее правило для всех statement
 // (операторов)
 // общий подход
@@ -99,10 +100,8 @@ defun execute:do-whileStatement($whileStatement) {
 }
 
 // правило для оператора for
-// rep(for e1 condition e2 s) = rep({e1, if(condition) do-while s (e2, condition)});
-// defun forStatement($expression1, $condition, $expression2, $forBody)
 defun execute:forStatement($forStatement) {
-	execute:expression($forStatement.expression1);
+	execute:expression($forStatement.initializer);
 	$condition = execute:expression($forStatement.condition);
 	if($condition != 0) then {
 	execute:statement($forStatement.forBody);
