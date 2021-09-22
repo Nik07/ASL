@@ -1,0 +1,23 @@
+// load("C:/Arxiv/ASL_Interpreter/src/MS.asl20");
+// load("C:/Arxiv/ASL_Interpreter/src/OM.asl20");
+// load("C:/Arxiv/ASL_Interpreter/src/Sem.asl20");
+
+//онтологическая модель функции sum
+@om1 = blockStatement(
+	funDeclaration(
+	    int,
+		sum,
+		seqOne(left, int, right, int),
+		blockStatement(
+			ifStatement(
+				op(">", left, right),
+				returnStatement(0),
+				returnStatement(op("+", left, funCall(sum, op("+", left, 1), right)))
+			)
+		)
+	),
+	expSt(funCall(sum, 1, 4))
+);
+
+// выполнение операционной семантики для онтологической модели функции sum
+@sem1 = execute:statement(@om1);
