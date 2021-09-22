@@ -1,0 +1,552 @@
+load("d:/Nesterenko/Init.asl20");
+
+load("d:/Nesterenko/OM.asl20");
+
+//1.1	isType()
+//Функция isType($type) возвращает истину, если $type является типом моделируемого языка
+defun isType($type) {
+	if ($type == int 
+		|| $type == bool
+		|| $type == double 
+		|| $type == string) then true;
+	else if (isAttributon($type)
+		&& ($type.enumType == concept 
+			|| $type.pointerType == concept 
+			|| $type.arrayType == concept 
+			||  $type.structType == concept) ) then true;
+	else false;
+}
+
+//1.2	defaultValue()
+//возвращает для типа значение по умолчанию
+defun defaultValue($type) {
+	if (isType($type))
+	then
+		if ($type == int) then 0;
+		else if ($type == bool) then false;
+		else if ($type == double) then 0.0;
+		else if ($type == string) then "";
+		else if ( isAttributon($type)) then
+		{
+			if ($type.enum == concept) then 1;
+			else if ($type.pointerType == concept) then null;
+			else if ($type.arrayType == concept)
+			then execute:newArray(newArray($type.type, 0));
+			else if ($type.structType == concept)
+			then execute:newStruct(newStruct($type.type));
+			else jump(defaultValue:Error, $type);
+		}
+		else jump(defaultValue:Error, $type);
+}
+
+//1.3	constantType()
+defun constantType ($expression) {	
+	if (isInteger($expression)) then int;
+	else if (isDouble($expression)) then double;
+	else if (isBool($expression)) then bool;
+	else if (isString($expression)) then string;
+	else jump(constantType:Error, $expression);
+}
+
+//2	Переменные
+//2.1	Правило для доступа к значению переменной
+defun execute:variableAccess($variableAccess) {
+	$variable = $variableAccess;
+	$value = @variableState[$variable];
+	if(isDef($value))
+	then tvalue($value, @variableType[$variable]);
+	else jump(execute:variableAccess:Error, $variableAccess);	
+}
+
+//2.2	Правило для присваивания значения переменной
+defun execute:variableAssignment($variableAssignment) {
+	$variable = $variableAssignment.variable;
+	if (isDef(@variableType[$variable]))
+	then {
+	    $tvalue = execute:expression($variableAssignment.expression);
+	    if ($tvalue.type == @variableType[$variable])
+	    then @variableState[$variable] = $tvalue.value;
+	    else jump(execute:Assignment:Error, $variableAccess);
+	}
+	else jump(execute:Assignment:Error, $variableAccess);
+}
+
+//2.3	Правило для объявления переменной (и присваивания ей значения)
+defun execute:variableDeclaration($variableDeclaration) {
+	$type = $variableDeclaration.type;
+	$variable = $variableDeclaration.variable;
+	if(isType($type))
+	then {
+		if (isDef($variableDeclaration.initializer)) 
+		then {
+			$tvalue = execute:expression($variableDeclaration.initializer);
+			if ($tvalue.type == $type)
+			then {
+				@variableType.$variable = $type;
+				@variableState.$variable = $tvalue.value;
+			}
+			else jump(execute:variableDeclaration:Error, $variableDeclaration);
+		}
+		else
+		{
+        	@variableType.$variable = $type;
+        	@variableState.$variable = defaultValue($type);
+        }
+	}
+	else jump(execute:variableDeclaration:Error, $variableDeclaration);
+}
+
+//3	Операции
+//3.1	Общее правило
+defun execute:op($op) {
+
+	$operation = $op.operation;
+	$arguments = $op.arguments;
+	$arg1  = execute:expression($arguments[1]);
+	$type = $arg1.type;
+	$isNumeric = ($type == int || $type == double);
+
+
+
+	if (isUndef($arguments[2])) then {
+		if ($operation == "-" && $isNumeric)
+		then tvalue(-$arg1.value, $type);
+		else if ($operation == "!" && $type == bool)
+		then tvalue(!$arg1.value, $type);
+		else jump(execute:op:Error, $op);
+	}
+	else 
+	{
+		$arg2  = execute:expression($arguments[2]);
+		if ($type != $arg2.type) then jump(execute:op:Error, $op);
+		else if ($operation == "conc" && $type == string)
+		then tvalue(strConcat($arg1.value , $arg2.value), $type);
+		else if ($type == bool) then {
+			if ($operation == "&&") then tvalue(($arg1.value && $arg2.value), $type);
+			else if ($operation == "||") then tvalue(($arg1.value || $arg2.value), $type);
+			else if ($operation == ">") then tvalue(($arg1.value > $arg2.value), $type);
+			else if ($operation == "<") then tvalue(($arg1.value < $arg2.value), $type);
+			else jump(execute:op:Error, $op);
+		}
+		else if ($isNumeric)
+		then {
+			if ($operation == "+") then tvalue($arg1.value + $arg2.value, $type);
+			else if ($operation == "-") then tvalue($arg1.value - $arg2.value, $type);
+			else if ($operation == "*") then tvalue($arg1.value * $arg2.value, $type);
+			else if ($operation == "/" && $arg2.value != defaultValue($type))
+			then tvalue($arg1.value / $arg2.value, double);
+			else if ($operation == ">")	then tvalue(($arg1.value > $arg2.value), bool);
+			else if ($operation == "<")	then tvalue(($arg1.value < $arg2.value), bool);
+			else if ($operation == "==") then tvalue(($arg1.value == $arg2.value), bool);
+			else jump(execute:op:Error, $op);
+		}
+		else jump(execute:op:Error, $op);
+	}
+}
+
+// commaExpression
+defun execute:commaExpression($commaExpression) {
+	forEachSeqAsc($i, $expression, $commaExpression.expressionSequence, progn(execute:expression($expression)));
+}
+
+
+//4	Операторы
+//4.1	Оператор блока
+
+//defun execute:blockStatement($blockStatement) {
+//	foreach $i $statement SeqAsc($blockStatement.statementSequence) {
+//		execute:statement($statement);
+//	}
+//};
+
+defun execute:blockStatement($blockStatement) {
+	forEachSeqAsc($i, $statement, $blockStatement.statementSequence, progn(execute:statement($statement)));
+}
+
+
+//4.2	Условный if
+defun execute:ifStatement($ifStatement) {
+	$tvalue = execute:expression($ifStatement.condition);
+	if($tvalue.type == bool)
+	then {
+	    if($tvalue.value)
+	    then execute:statement($ifStatement.thenBranch);
+	    else {
+    		$elseBranch = $ifStatement.elseBranch;
+	    	if(isDef($elseBranch))
+	    	then execute:statement($elseBranch);
+	    }
+	}
+	else jump(execute:ifStatement:Error, $ifStatement);
+}
+
+//4.3	 Оператор switchStatement
+//4.3.1	caseStatement
+defun execute:caseStatement($caseStatement) {
+}
+
+//4.3.2	defaultStatement 
+defun execute:defaultStatement($defaultStatement) {
+}
+
+//4.3.3	switchStatement
+defun execute:switchStatement($switchStatement) {
+	$switchExpVal = execute:expression($switchStatement.expression);
+	if ($switchExpVal.type == int)
+	then {
+		$found = false;
+		forEachSeqAsc($i, $statement, $switchStatement.blockStatement.statementSequence,
+			progn(
+				{
+					if ($found)
+					then execute:statement($statement);
+					else if($statement.defaultStatement == concept)
+					then $found = true;
+					else if($statement.caseStatement == concept)
+					then
+					{
+						$expLabel = execute:expression($statement.label);
+						if($expLabel.type == int
+							&& ($expLabel.value == $switchExpVal.value))
+						then $found = true;
+					}
+				}
+			)
+		);
+		catch(break);
+	}
+	jump(execute:switchStatement:Error, $switchStatement);
+}
+
+//4.4	Операторы передачи управления
+//4.4.1	break
+defun execute:breakStatement($breakStatement) {
+	jump(break);
+}
+
+//4.4.2	continue
+defun execute:continueStatement($continueStatement) {
+	jump(continue);
+}
+
+//4.5	Операторы цикла
+//4.5.1	Оператор for без инициализации
+defun execute:forStatementWithoutInitializer($forStatement) {
+	$tvalue = execute:expression(coalesce($forStatement.condition, true));
+	if($tvalue.type == bool && $tvalue.value)
+	then {
+		execute:statement($forStatement.body);
+		catch(continue);
+		$iterator = $forStatement.iterator;
+		if(isDef($iterator)) then execute:expression($iterator);
+		execute:forStatementWithoutInitializer($forStatement);
+	};
+	catch(break); 
+}
+
+//4.5.2	Оператор for
+defun execute:forStatement($forStatement) {
+	$initializer = $forStatement.initializer;
+	if(isDef($initializer)) then execute:expression($initializer); 
+	execute:forStatementWithoutInitializer($forStatement); 
+}
+
+//4.5.3	Оператор while
+defun execute:whileStatement($whileStatement) {
+	$tvalue = execute:expression($whileStatement.condition);
+	if($tvalue.type == bool && $tvalue.value)
+	then {
+		execute:statement($whileStatement.body);
+		execute:whileStatement($whileStatement);
+	};
+	catch(break);
+}
+
+//4.5.4	Оператор doWhile
+defun execute:doWhileStatement($whileStatement) {
+	execute:statement($whileStatement.body);
+	execute:whileStatement($whileStatement);
+}
+
+//5	Перечисление
+//5.1	Плучить значение enum
+defun execute:enumAccess($enumAccess) {
+	$enum = execute:expression($enumAccess.enum);
+	$value = $enum.value[$enumAccess.const];
+	if(isDef($value)) then $value;
+	else jump(execute:enumAccess:Error, $enumAccess);
+}
+
+//6	Указатель
+//6.1	Создать указатель
+defun execute:new($new) {
+	$type = $new.type;
+	conz(
+		pointer, concept,
+		type, $type,
+		value, defaultValue($type)
+	);
+}
+
+//6.2	Выполнить доступ по указателю
+defun execute:pointerAccess($pointerAccess) {
+	$pointer = $pointerAccess.pointer;
+  	$pointer.value;
+}
+
+//6.3	Выполнить присваивание
+defun execute:pointerAssignment($pointerAssignment) {
+	$tvalue = execute:expression($pointerAssignment.value);	
+	$pointerAssignment.pointer.value = $tvalue.value;
+}
+
+//7	Составные типы данных
+//7.1	Массив
+//7.1.1	создать массив как значение
+defun execute:newArray($newArray){
+  	$array = conz(
+		array, concept, 
+		length, expression($newArray.length), 
+		type, arrayType($newArray.type),
+		value, conz()
+	);
+ 	$i = 1;
+    while($i <= $length) {
+    	$array.value[$i] = defaultValue($type);
+    	$i = $i + 1;
+    };
+    $array;
+}
+
+//7.1.2	доступа к значению элемента массива
+defun execute:elementArrayAccess($elementArrayAccess) {
+	$tarray = execute:expression($elementArrayAccess.array);
+	$array = $tarray.value;
+	$type = $array.type.type;
+
+	$tindex = execute:expression($elementArrayAccess.index);
+	$index = $tindex.value;
+
+	if(1 <= $index && $index <= $array.arrayType.length) 
+	then $value = $array.value[$index];
+	else jump(execute:elementArrayAccess:Error, $elementArrayAccess);
+	
+	if(isDef($value)) then tvalue($value, $type);
+	else jump(execute:elementArrayAccess:Error, $elementArrayAccess);	
+}
+
+//7.1.3	присвоить значение элементу массива
+defun execute:elementArrayAssignment($elementArrayAssignment) {
+	$tarray = execute:expression($elementArrayAssignment.array);
+	$array = $tarray.value;
+	$tindex = execute:expression($elementArrayAssignment.index);
+	$index = $tindex.value;
+	$tvalue = execute:expression($elementArrayAssignment.value);
+
+	if(1 <= $index
+			&& $index <= $array.length 
+			&& $tvalue.type == $array.type.type)
+	then $array. value[$index] = $tvalue.value;
+	else jump(execute:elementArrayAssignment:Error, $elementArrayAssignment);
+}
+
+//7.2	Структура
+//7.2.1	создать структуру как значение
+defun execute:newStruct($newStruct){
+	$structType = $newStruct.structType;
+	$struct = conz(
+		struct, concept,
+		type, $structType,
+		value, conz()
+	);
+//	foreach $field $ftype Subj($structType.value) {
+//		$struct.value.$field = defaultValue($ftype);
+//	}
+	forEach($field, $ftype, Subj($structType.value), progn(({$struct.value.$field = defaultValue($ftype);})));
+}
+
+//7.2.2	доступа к значению поля структуры
+defun execute:fieldStructAccess($fieldStructAccess) {
+	$field = $fieldStructAccess.field;	
+	$tStruct = execute:expression($fieldStructAccess.struct);
+	$struct = $tStruct.value;
+	$type = $struct.type.value[$field];
+	$value = $struct.value[$field];
+	if(isDef($type) && isDef($value))
+	then tvalue($value, $type);
+	else jump(execute:fieldStructAccess:Error, $fieldStructAccess);
+}
+
+//7.2.3	присвоить значение полю структуры
+defun execute:fieldStructAssignment($fieldStructAssignment) {
+	$field = $fieldStructAssignment.field;
+	$tStruct = execute:expression($fieldStructAssignment.struct);
+	$struct = $tStruct.value;
+	$type = ($struct.type.value[$field]) ;
+	$tvalue = execute:expression($fieldStructAssignment.value);
+
+	if(isDef($tvalue.value ) && $tvalue.type  == $type)
+	then $struct.value[$field] = $tvalue.value;
+	else jump(execute:fieldStructAssignment:Error, $fieldStructAssignment);
+}
+
+//8	Оператор forEach
+defun execute:forEachStatement($forEachStatement) {
+	$array = $forEachStatement.array;
+	$attributon = $array.value;
+	$nameVariable = $forEachStatement.nameVariable;
+	$type = $array.type;
+	$length = $array.length;
+	if (isType($type))
+	then
+	{
+		$i = 1;
+		while($i <= $length)
+		{
+			@variableState[$nameVariable] = $attributon[i];
+			execute:statement($forEachStatement.body);
+			catch(continue);
+			$i = $i + 1;
+		};
+		catch(break); 
+	}
+	else jump(execute:forEachStatement:Error, $forEachStatement);
+}
+
+//9	Общее правило для expression
+defun execute:expression($expression) {
+	if(isAtom($expression)) then
+    	{
+    		if(isDef(@enumState[$expression]))
+    		then
+    			tvalue(@enumState[$expression], @enumType[$expression]);
+    		else if(isDef(@variableType[$expression])) then execute:variableAccess($expression);
+    		else tvalue($expression, constantType($expression)); // случай константы
+    	}
+	else if(isUndef($expression)) then jump(execute:expression:Error, $expression);
+	else {
+		if($expression.variableAccess == concept) then execute:variableAccess($expression);
+		else if($expression.commaExpression == concept) then execute:commaExpression($expression);
+		else if($expression.enumAccess == concept) then execute:enumAccess($expression);
+		else if($expression.new == concept) then execute:new($expression);
+		else if($expression.pointerAccess == concept) then execute:pointerAccess($expression);
+		else if($expression.newArray == concept) then execute:newArray($expression);
+		else if($expression.fieldStructAccess == concept) then execute:fieldStructAccess($expression);
+		else if($expression.elementArrayAccess == concept) then execute:elementArrayAccess($expression);
+		else if($expression.op == concept) then execute:op($expression);
+		else if($expression.funCall == concept) then execute:funCall($expression);
+		else jump(execute:expression:Error, $expression);
+   	}
+}
+
+@h1 = seqOne();
+
+//10	Общее правило для statement
+defun execute:statement($statement) {
+	if ($statement.expressionStatement == concept)
+	then execute:expression($statement.expression);
+	else if ($statement.ifStatement == concept)
+	then execute:ifStatement($statement);
+	else if($statement.blockStatement == concept)
+	then execute:blockStatement($statement);
+	else if($statement.whileStatement == concept)
+	then execute:whileStatement($statement);
+	else if($statement.returnStatement == concept)
+	then execute:returnStatement($statement);
+	else if($statement.doWhileStatement == concept)
+	then execute:doWhileStatement($statement);
+	else if($statement.switchStatement == concept)
+	then execute:switchStatement($statement);
+	else if($statement.breakStatement == concept)
+	then execute:breakStatement($statement);
+	else if($statement.continueStatement == concept)
+	then execute:continueStatement($statement);
+	else if($statement.caseStatement == concept)
+	then execute:caseStatement($statement);
+	else if($statement.defaultStatement == concept)
+	then execute:defaultStatement($statement);
+	else if($statement.forStatementWithoutInitializer == concept)
+	then execute:forStatementWithoutInitializer($statement);
+	else if($statement.forStatement == concept)
+	then execute:forStatement($statement);
+	else if($statement.forEachStatement == concept)
+	then execute:forEachStatement($statement);
+	else if($statement.variableDeclaration == concept)
+	then execute:variableDeclaration($statement);
+	else if($statement.funDeclaration == concept)
+	then execute:funDeclaration($statement);
+	else if($statement.pointerAssignment == concept)
+	then execute:pointerAssignment($statement);
+	else if($statement.fieldStructAssignment == concept)
+	then execute:fieldStructAssignment($statement);
+	else if($statement.variableAssignment == concept)
+	then execute:variableAssignment($statement);
+	else if($statement.elementArrayAssignment == concept)
+	then execute:elementArrayAssignment($statement);
+	else jump(execute:statement:Error, $statement);
+}
+
+defun execute:returnStatement($returnStatement) {
+  $tvalue = execute:expression($returnStatement.expression);
+  jump(returnJump, $tvalue);
+}
+
+//11	Функция
+//11.1	Определить функцию
+defun execute:funDeclaration($funDeclaration) {
+	$name = $funDeclaration.name;	
+	if(isDef($funDeclaration.redefined) || isUndef(@functions.$name))
+	then @functions[$name] = $funDeclaration;
+	else jump(execute:funDeclaration:Error, $funDeclaration); 	
+}
+
+//arguments – последовательность имен аргументов
+//argType – атрибутон: argType[n] = t
+
+
+//11.2	 Вычислить значение функции
+defun execute:funCall($funCall){
+	$name = $funCall.name;
+	$funDeclaration = @functions.$name;
+	
+	//проверим, что функция определена
+	if(isUndef($funDeclaration)) then jump(execute:funCall:Error, $name);
+
+	$funCallArguments = $funCall.arguments;
+	$argType = $funDeclaration.argType;
+	$arguments = $funDeclaration.arguments;
+
+    $argValues = conz();
+	// проверим, что переданы все аргументы и они имеют нужный тип
+	//
+	$i = 0;
+	$len = $arguments.seqLen;
+
+	while($i < $len) {
+		$i = $i + 1;
+		$argName = $arguments[$i];
+		$argTValue = execute:expression($funCallArguments[$i]);
+		if($argTValue.type != $argType[$argName]) then jump(execute:funCall:Error, $funCall);
+		$argValues[$argName] = $argTValue.value;
+	}
+
+	//еще один цикл для заполнения @variableState и @variableType
+	$i = 0;
+	while($i < $len) {
+		$i = $i + 1;
+		$argName = $arguments[$i];
+		@variableState[$argName] = $argValues[$argName];
+		@variableType[$argName] = $argType[$argName];
+	}
+
+	//вычислим тело функции
+	execute:statement($funDeclaration.body);
+	catch(returnJump, ({$returnTValue = $_:jumpValue;}));
+
+	if(isDef($returnTValue) && $returnTValue.type == $funDeclaration.returnType)
+	then $returnTValue;
+	else jump(execute:funCall:Error, $funCall);
+}
+
+load("d:/Nesterenko/test01.asl20");
+
